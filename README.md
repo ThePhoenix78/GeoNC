@@ -117,4 +117,6 @@ val3 = client.get_from_coord(10, 20)
 
 ```
 
-_API faite a but éducative, je ne suis pas responsable de ce que vous en faite_
+_API faite a but éducative (dans le cadre de l'interopérabilité avec le langage python)_
+
+_je ne suis pas responsable de ce que vous en faite_
