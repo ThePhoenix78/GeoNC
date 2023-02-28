@@ -1,8 +1,5 @@
 # GeoNC
 
-Mention légales georep : https://cadastre.gouv.nc/a-propos
-
-Mention légales arcgis : https://georep-dtsi-sgt.opendata.arcgis.com/pages/conditions-generales-dutilisation
 
 ### utilisation de l'API
 
@@ -116,6 +113,10 @@ val2 = client.get_from_nic("xxxxx-xxxx")
 val3 = client.get_from_coord(10, 20)
 
 ```
+
+Mention légales georep : https://cadastre.gouv.nc/a-propos
+
+Mention légales arcgis : https://georep-dtsi-sgt.opendata.arcgis.com/pages/conditions-generales-dutilisation
 
 _API faite a but éducative (dans le cadre de l'interopérabilité avec le langage python)_
 
