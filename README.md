@@ -1,5 +1,8 @@
 # GeoNC
 
+Mention légales georep : https://cadastre.gouv.nc/a-propos
+Mention légales arcgis : https://georep-dtsi-sgt.opendata.arcgis.com/pages/conditions-generales-dutilisation
+
 ### utilisation de l'API
 
 * ##### GeorepNC
