@@ -1,95 +1,117 @@
-# GeoNC
+# 🌍 GeoNC
 
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![New Caledonia](https://img.shields.io/badge/New--Caledonia-Geodata-brightgreen)](https://georep.nc/)
+[![License](https://img.shields.io/badge/License-MIT-orange.svg)](LICENCE)
 
-### utilisation de l'API
+**GeoNC** est une bibliothèque Python permettant d'interagir facilement avec les services de données géographiques de la **Nouvelle-Calédonie**. Elle combine les capacités de **GeorepNC** et **ArcgisNC** pour offrir une interface unifiée, disponible en modes **synchrone** et **asynchrone**.
 
-* ##### GeorepNC
+---
 
-* ##### ArcgisNC
+## 🚀 Installation
 
-* ##### GeoNC
+Vous pouvez installer les dépendances nécessaires via `pip` :
 
+```bash
+pip install -r requirements.txt
+```
 
-## GeorepNC
+*Note : Assurez-vous d'avoir `requests`, `aiohttp` et `pyproj` installés.*
 
-### Paramètres
+---
 
-* __geo_conn__ : la connection avec le serveur
-* __payload__ : infos pour les requetes (ne pas toucher)
-* __request_header__ : header des requetes liées aux demandes vers le serveur
-* __coord_headers__ : header des requetes liées aux coordonées
-* __nic_header__ : header des requetes liées au NIC
+## 💡 Utilisation Rapide
 
+GeoNC propose deux interfaces : une pour le code classique (synchrone) et une pour le code moderne (asynchrone).
 
-### Méthodes
-* __get_info__ _(adresse : str)_ : permet de retourner des infos liées a l'adresse
-
-* __get_adresse_list__ _(numero: str="", street: str="", nic: str="")_ : permet de retourner une liste d'adresse correspondant a la requete
-
-* __get_adresse__ _(numero: str="", street: str="", nic="")_ : retourne les informations complètes liées a l'adresse / nic
-
-* __get_nic__ _(nic: str)_ : retourne les informations relative au nic
-
-* __get_coord__ _(x, y)_ : retourne les informations correspondant aux coordonnées
-
-
-## ArcgisNC
-
-### Arguments
-
-* __max__ : int = 6 , le nombre maximum d'éléments dans la réponse
-* __connect__ : bool = True
-
-### Paramètres
-
-* __arc_conn__ : la connection avec le serveur
-* __payload__ : infos pour les requetes (ne pas toucher)
-* __headers__ : header des requetes liées aux demandes vers le serveur
-* __typical__ : données comprise dans les réponses vides
-
-### Méthodes
-* __arc_connect__ : permet de lier le client au serveur (automatique)
-
-* __get_adresse__ _(numero: str="", street: str="")_ : permet de retourner une liste d'adresses correspondant a la requete
-
-* __get_maritime__ _(numero: str="", street: str="")_ : permet de retourner une liste d'espaces maritime correspondant a la requete
-
-* __get_pois__ _(numero: str="", street: str="")_ : permet de retourner une liste de POI correspondant a la requete
-
-* __get_all__ _(numero: str = "", street: str = "")_ : retourne le résultat (si il existe) de toute les requetes au dessus
-
-## GeoNC
-
-### Une combinaison de GeorepNC et ArcgisNC
-
-### Arguments
-
-* __max_results__ : int = 6 , le nombre maximum d'éléments dans la réponse
-* __connect__ : bool = True
-
-### Paramètres
-
-* __\_to_lambert__ : classe pour transformer du espg (nc) en lambert (universel) (ne pas toucher)
-* __\_to_epsg__ : classe pour transformer du lambert (universel) en espg (nc) (ne pas toucher)
-
-
-### Exemple de code
-```py
+### Mode Synchrone
+```python
 from geonc.sync import GeoNC
-# from geonc.asyn import GeoNC
 
 client = GeoNC()
 
-val1 = client.get_adresse(street="Jean Jaures")
-val2 = client.get_nic("xxxxx-xxxx")
-val3 = client.get_coord(10, 20)
+# Recherche par adresse
+adresse = client.get_adresse(street="Jean Jaurès", number="10")
+print(adresse.ftsAddressLabel)
 
+# Recherche par NIC (Numéro d'Inventaire Cadastral)
+parcelle = client.get_nic("12345-6789")
 ```
 
-Mention légales georep : https://cadastre.gouv.nc/a-propos
+### Mode Asynchrone
+```python
+import asyncio
+from geonc.asyn import GeoNC
 
-Mention légales arcgis : https://georep-dtsi-sgt.opendata.arcgis.com/pages/conditions-generales-dutilisation
+async def main():
+    client = GeoNC()
+    
+    # Recherche de POI (Points d'Intérêt)
+    pois = await client.get_pois(street="Victoire")
+    for poi in pois:
+        print(poi.address)
 
-_API faite a but éducative (dans le cadre de l'interopérabilité avec le langage python)_
+asyncio.run(main())
+```
 
-_je ne suis pas responsable de ce que vous en faite_
+---
+
+## 📖 Référence de l'API
+
+La classe principale `GeoNC` hérite des méthodes de `GeorepNC` et `ArcgisNC`.
+
+### 🛰️ GeorepNC
+Services liés au cadastre et aux adresses officielles de Nouvelle-Calédonie.
+
+- **`get_adresse(number="", street="", nic="")`** : Retourne les informations complètes d'une adresse ou d'un NIC.
+- **`get_adresse_list(number="", street="", nic="")`** : Retourne une liste d'adresses correspondant à la requête.
+- **`get_nic(nic)`** : Retourne les informations relatives à un Numéro d'Inventaire Cadastral spécifique.
+- **`get_coords(x, y)`** : Retourne les informations correspondant à des coordonnées (EPSG:3163).
+- **`get_info(adresse)`** : Recherche brute sur le service parcellaire.
+
+### 🗺️ ArcgisNC
+Services de localisation, cadastre et points d'intérêt via les serveurs ArcGIS de la DTSI.
+
+- **`get_localisation(number="", street="")`** : Géocodage d'adresses.
+- **`get_cadastre(number="", street="")`** : Recherche dans la base cadastrale ArcGIS.
+- **`get_pois(number="", street="")`** : Recherche de Points d'Intérêt (POIs).
+- **`get_all(number="", street="")`** : Combine les résultats de localisation, cadastre et POI.
+
+### 🔄 Conversions de Coordonnées
+GeoNC inclut des outils pour transformer les coordonnées entre le système local (EPSG:3163 - Lambert NC) et le système universel (WGS84).
+
+- **`to_lambert(x, y)`** : Convertit du format local (EPSG:3163) vers WGS84.
+- **`to_epsg(x, y)`** : Convertit de WGS84 vers le format local (EPSG:3163).
+
+---
+
+## 🏗️ Structure des Données
+
+Tous les résultats sont encapsulés dans un objet **`GeoClass`**. Cela permet d'accéder aux données comme à des attributs d'objet ou comme à un dictionnaire.
+
+```python
+resultat = client.get_adresse(nic="1234")
+
+# Accès par attribut (recommandé)
+print(resultat.parcelle.commune)
+
+# Accès par clé (style dictionnaire)
+print(resultat["parcelle"]["commune"])
+
+# Export en JSON
+print(resultat.json)
+```
+
+---
+
+## ⚖️ Mentions Légales
+
+Cette bibliothèque a été créée à but éducatif pour faciliter l'interopérabilité avec le langage Python. L'auteur n'est pas responsable de l'usage fait de cet outil.
+
+Veuillez consulter les conditions d'utilisation des services originaux :
+- **Georep** : [cadastre.gouv.nc/a-propos](https://cadastre.gouv.nc/a-propos)
+- **ArcGIS NC** : [Conditions Générales d'Utilisation](https://georep-dtsi-sgt.opendata.arcgis.com/pages/conditions-generales-dutilisation)
+
+---
+
+_Fait avec ❤️ pour la communauté NC._
