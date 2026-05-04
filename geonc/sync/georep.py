@@ -65,9 +65,6 @@ class GeorepNC(GeoRequests):
             'dnt': "1"
             }
 
-        if connect:
-            self.tile_connect()
-
     def tile_connect(self):
         """
         connect to the tile socket (png)
