@@ -47,7 +47,7 @@ async def main():
     client = GeoNC()
     
     # Recherche de POI (Points d'Intérêt)
-    pois = await client.get_pois(street="Victoire")
+    pois = await client.get_pois(street="Jean Jaures")
     for poi in pois:
         print(poi.address)
 
@@ -66,7 +66,7 @@ Services liés au cadastre et aux adresses officielles de Nouvelle-Calédonie.
 - **`get_adresse(number="", street="", nic="")`** : Retourne les informations complètes d'une adresse ou d'un NIC.
 - **`get_adresse_list(number="", street="", nic="")`** : Retourne une liste d'adresses correspondant à la requête.
 - **`get_nic(nic)`** : Retourne les informations relatives à un Numéro d'Inventaire Cadastral spécifique.
-- **`get_coords(x, y)`** : Retourne les informations correspondant à des coordonnées (EPSG:3163).
+- **`get_coords(x, y, nic)`** : Retourne les informations correspondant à des coordonnées (EPSG:3163) (coords ou NIC).
 - **`get_info(adresse)`** : Recherche brute sur le service parcellaire.
 
 ### 🗺️ ArcgisNC
