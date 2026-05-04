@@ -65,9 +65,6 @@ class GeorepNC(GeoRequests):
             'dnt': "1"
             }
 
-        if connect:
-            self.tile_connect()
-
     def tile_connect(self):
         """
         connect to the tile socket (png)
@@ -237,6 +234,4 @@ class GeorepNC(GeoRequests):
         res = await self.arequest(method="GET", endpoint=f"/arcgisServices/cadastreV3/cadastre_consult_v333/MapServer/7/query?{data}", payload=self.payload, headers=self.coord_headers)
         res = res.json
 
-        print(res)
-        # return res
         return GeoObject({"geometryType": res["geometryType"], "spatialReference": res["spatialReference"], "features": res["features"]})
