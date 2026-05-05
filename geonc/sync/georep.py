@@ -106,7 +106,8 @@ class GeorepNC(GeoRequests):
                     }
                 }
         data = urlencode(data).replace("%27", "%22").replace("+", "%20").replace("%20", "", 1)
-        fin = self.request(method="GET", endpoint=f"/api/parcel/fts?{data}", payload=self.payload, headers=self.request_header).json
+        fin = self.request(method="GET", endpoint=f"/api/parcel/fts?{data}", payload=self.payload, headers=self.request_header)
+        fin = fin.json
         
         return GeoObject(fin)
 
@@ -194,7 +195,8 @@ class GeorepNC(GeoRequests):
         }
 
         data = urlencode(data).replace("%27", "%22").replace("+", "%20").replace("%20", "", 1)
-        res = self.request(method="GET", endpoint=f"/api/parcel?{data}", payload=self.payload, headers=self.nic_header).json
+        res = self.request(method="GET", endpoint=f"/api/parcel?{data}", payload=self.payload, headers=self.nic_header)
+        res = res.json
 
         return GeoObject(res)
 
@@ -227,6 +229,7 @@ class GeorepNC(GeoRequests):
 
             data = urlencode(data).replace("+", "%20").replace("%20", "", 1)
 
-        res = self.request(method="GET", endpoint=f"/arcgisServices/cadastreV3/cadastre_consult_v333/MapServer/7/query?{data}", payload=self.payload, headers=self.coord_headers).json
+        res = self.request(method="GET", endpoint=f"/arcgisServices/cadastreV3/cadastre_consult_v333/MapServer/7/query?{data}", payload=self.payload, headers=self.coord_headers)
+        res = res.json
         
         return GeoObject({"geometryType": res["geometryType"], "spatialReference": res["spatialReference"], "features": res["features"]})
