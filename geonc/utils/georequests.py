@@ -3,7 +3,6 @@ import requests
 import aiohttp
 import asyncio
 import time
-import json
 
 
 class APIResponse:

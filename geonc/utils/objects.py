@@ -1,5 +1,4 @@
 import inspect
-import copy
 
 
 class GeoClass:
@@ -39,7 +38,6 @@ class GeoClass(dict):
             else:
                 setattr(self, k, v)
         
-    
     def __repr__(self):
         return str({k: v for k, v in self.__dict__.items()})
 
