@@ -1,9 +1,9 @@
 # 🌍 GeoNC
 
-[![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![New Caledonia](https://img.shields.io/badge/New--Caledonia-Geodata-brightgreen)](https://georep.nc/)
 [![License](https://img.shields.io/badge/License-MIT-orange.svg)](LICENCE)
-[![Version](https://img.shields.io/badge/Version-2.1+-blue)](https://pypi.org/project/GeoNC/)
+[![Version](https://img.shields.io/badge/Version-2.2+-blue)](https://pypi.org/project/GeoNC/)
 
 **GeoNC** est une bibliothèque Python permettant d'interagir facilement avec les services de données géographiques de la **Nouvelle-Calédonie**. Elle combine les capacités de **GeorepNC** et **ArcgisNC** pour offrir une interface unifiée, disponible en modes **synchrone** et **asynchrone**.
 
@@ -14,10 +14,10 @@
 Vous pouvez installer les dépendances nécessaires via `pip` :
 
 ```bash
-pip install GeoNC
+pip install geonc
 ```
 
-*Note : La bibliothèque dépend de `requests`, `aiohttp` et `pyproj`.*
+*Note : La bibliothèque dépend de `requests`, `aiohttp`, `urllib3` et `pyproj`.*
 
 ---
 
