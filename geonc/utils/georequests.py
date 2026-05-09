@@ -55,7 +55,7 @@ class GeoRequests():
         if payload is None:
             payload: str = self.payload
 
-        if use_cache == True:
+        if use_cache:
             cached_data = self.cache.get(endpoint)
 
             if cached_data is not None:
@@ -72,18 +72,19 @@ class GeoRequests():
         headers: dict = {**headers, **_headers}
 
         with self.session.request(method=method, url=f"{self.base_api}{endpoint}", headers=headers, data=payload, *args, **kwargs) as data:
-            self.etag[endpoint] = data.headers.get("etag", self.etag.get(endpoint))
-
             if data.status_code == 200:
                 try:
                     data_json: dict = data.json()
                 except Exception:
                     data_json: str = {}
 
-                self.cache[endpoint] = {"json": data_json, "text": data.text}
+                if self.use_etag:
+                    self.etag[endpoint] = data.headers.get("etag", self.etag.get(endpoint))
+                    self.cache[endpoint] = {"json": data_json, "text": data.text}
+    
                 return APIResponse(headers=data.headers, json=data_json, text=data.text, status_code=data.status_code, is_cache=False)
 
-            elif data.status_code == 304:
+            elif data.status_code == 304 and self.use_etag:
                 cache: dict = self.cache.get(endpoint)
                 return APIResponse(headers=data.headers, json=cache.get("json"), text=cache.get("text"), status_code=data.status_code, is_cache=True)
 
@@ -111,7 +112,7 @@ class GeoRequests():
         if payload is None:
             payload: str = self.payload
 
-        if use_cache == True:
+        if use_cache:
             cached_data = self.cache.get(endpoint)
 
             if cached_data is not None:
@@ -130,16 +131,18 @@ class GeoRequests():
         if session is None:
             async with aiohttp.ClientSession(base_url=self.base_api) as session:
                 async with session.request(method=method, url=f"{endpoint}", headers=headers, data=payload, *args, **kwargs) as data:
-                    self.etag[endpoint] = data.headers.get("etag", self.etag.get(endpoint))
-                    data_json: str = {}
+                    data_json: dict = {}
                     
                     if data.status == 200:
                         try:
                             data_json: dict = await data.json()
                         except Exception:
-                            data_json: str = {}
+                            data_json: dict = {}
 
-                        self.cache[endpoint] = {"json": data_json, "text": data.text}
+                        if self.use_etag:
+                            self.etag[endpoint] = data.headers.get("etag", self.etag.get(endpoint))
+                            self.cache[endpoint] = {"json": data_json, "text": data.text}
+    
                         return APIResponse(headers=data.headers, json=data_json, text=data.text, status_code=data.status, is_cache=False)
 
                     elif data.status == 304:
@@ -150,7 +153,6 @@ class GeoRequests():
 
         else:
             async with session.request(method=method, url=f"{self.base_api}{endpoint}", headers=headers, data=payload, *args, **kwargs) as data:
-                self.etag[endpoint] = data.headers.get("etag", self.etag.get(endpoint))
                 # head: dict = await data.headers
                 if data.status == 200:
                     try:
@@ -158,10 +160,13 @@ class GeoRequests():
                     except Exception:
                         data_json: str = {}
 
-                    self.cache[endpoint] = {"json": data_json, "text": data.text}
+                    if self.use_etag:
+                        self.etag[endpoint] = data.headers.get("etag", self.etag.get(endpoint))
+                        self.cache[endpoint] = {"json": data_json, "text": data.text}
+                    
                     return APIResponse(headers=data.headers, json=data_json, text=data.text, status_code=data.status, is_cache=False)
 
-                elif data.status == 304:
+                elif data.status == 304 and self.use_etag:
                     cache: dict = self.cache.get(endpoint)
                     return APIResponse(headers=data.headers, json=cache.get("json"), text=cache.get("text"), status_code=data.status, is_cache=True)
 
