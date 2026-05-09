@@ -11,7 +11,7 @@ import http.client
 
 class GeorepNC(GeoRequests):
     def __init__(self):
-        GeoRequests.__init__(self, "https://cadastre.gouv.nc")
+        GeoRequests.__init__(self, "https://cadastre.gouv.nc", use_etag=False)
         self.tile_conn = None
         self.payload = ""
 
