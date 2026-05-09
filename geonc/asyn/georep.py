@@ -3,7 +3,6 @@ from ..utils.objects import GeoObject, GeoClass
 from ..utils.georequests import GeoRequests
 
 from urllib.parse import urlencode
-import http.client
 
 
 # Fonds  DITTT  -  Gouvernement  de  la Nouvelle-Calédonie (2021)
@@ -12,10 +11,7 @@ import http.client
 class GeorepNC(GeoRequests):
     def __init__(self):
         GeoRequests.__init__(self, "https://cadastre.gouv.nc")
-        self.tile_conn = None
         self.payload = ""
-
-        self.image_request = "https://geosgt.gouv.nc/public/rest/services/fond_imagerie/MapServer/tile"
 
         self.request_header = {
             'Host': "cadastre.gouv.nc",
@@ -64,36 +60,6 @@ class GeorepNC(GeoRequests):
             'Cookie': "SERVERID=webadaptor2",
             'dnt': "1"
             }
-
-    def tile_connect(self):
-        """
-        connect to the tile socket (png)
-        """
-        self.tile_conn = http.client.HTTPSConnection("geosgt.gouv.nc")
-
-    def get_tile(self, zoom: int = 0, y: int = 0, x: int = 0, out_border: bool = False, check_out_border: bool = True):
-        """
-        parameters :
-            zoom (int) : the zoom (3-13),
-            y (int) : the y coord (epsg 3163),
-            x (int) : the x coord (epsg 3163),
-            outborder (bool) : get the map out of the nc
-            check_outborder (bool) : return False if out of th map, else a blue square
-        
-        return a tile (png/jpeg)
-        """
-        blank = "true" if out_border else "false"
-        link = f"{self.image_request}/{zoom}/{y}/{x}?blankTile={blank}"
-        headers = {'cookie': "SERVERID=webadaptor2"}
-
-        self.tile_conn.request("GET", link, headers=headers)
-        res = self.tile_conn.getresponse()
-        data = res.read()
-
-        if not check_out_border and len(data) <= 775:
-            return False
-
-        return data
 
     async def get_info(self, adresse: str = "") -> GeoClass:
         """

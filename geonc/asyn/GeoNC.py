@@ -1,13 +1,16 @@
 from .georep import GeorepNC
 from .arcgis import ArcgisNC
+from .tiles import GeosgtNC
 
 from pyproj import Transformer
 
 
-class GeoNC(GeorepNC, ArcgisNC):
+class GeoNC(GeorepNC, ArcgisNC, GeosgtNC):
     def __init__(self):
         GeorepNC.__init__(self)
         ArcgisNC.__init__(self)
+        GeosgtNC.__init__(self)
+        
         self._to_lambert = Transformer.from_crs(3163, 4326, always_xy=True)
         self._to_epsg = Transformer.from_crs(4326, 3163, always_xy=True)
 
