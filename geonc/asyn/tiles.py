@@ -38,3 +38,65 @@ class GeosgtNC(GeoRequests):
             return False
 
         return Image.open(BytesIO(data))
+
+
+class ArcGISonlineTile(GeoRequests):
+    def __init__(self):
+        GeoRequests.__init__(self, "https://server.arcgisonline.com", use_etag=True)
+        self.payload = ""
+
+    async def get_tile(self, zoom: int = 0, y: int = 0, x: int = 0):
+        """
+        parameters :
+            zoom (int) : the zoom (3-13),
+            y (int) : the y coord (epsg 3163),
+            x (int) : the x coord (epsg 3163),
+            outborder (bool) : get the map out of the nc
+            check_outborder (bool) : return False if out of th map, else a blue square
+        
+        return a tile (png/jpeg)
+        """
+        link = f"/ArcGIS/rest/services/World_Imagery/MapServer/tile/{zoom}/{y}/{x}"
+
+        res = await self.arequest("GET", link)
+        data = res.content
+
+        return Image.open(BytesIO(data))
+
+
+class ArcGISTile(GeoRequests):
+    def __init__(self):
+        GeoRequests.__init__(self, "https://tiles.arcgis.com", use_etag=True)
+        self.payload = ""
+        self.headers: dict = {
+            'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:148.0) Gecko/20100101 Firefox/148.0",
+            'accept': "*/*",
+            'accept-language': "fr,fr-FR;q=0.8,en-US;q=0.5,en;q=0.3",
+            'accept-encoding': "json, deflate, br",
+            'referer': "https://cadastre.gouv.nc/",
+            'origin': "https://cadastre.gouv.nc",
+            'sec-gpc': "1",
+            "dnt": "1",
+            'sec-fetch-dest': "empty",
+            'sec-fetch-mode': "cors",
+            'sec-fetch-site': "cross-site",
+            "te": "trailers",
+            }
+
+    async def get_tile(self, zoom: int = 0, y: int = 0, x: int = 0):
+        """
+        parameters :
+            zoom (int) : the zoom (3-13),
+            y (int) : the y coord (epsg 3163),
+            x (int) : the x coord (epsg 3163),
+            outborder (bool) : get the map out of the nc
+            check_outborder (bool) : return False if out of th map, else a blue square
+        
+        return a tile (png/jpeg)
+        """
+        link = f"/tiles/TZcrgU6CIbqWt9Qv/arcgis/rest/services/fond_imagerie/MapServer/tile/{zoom}/{y}/{x}"
+
+        res = await self.arequest("GET", link)
+        data = res.content
+
+        return Image.open(BytesIO(data))
