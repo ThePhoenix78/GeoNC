@@ -7,7 +7,7 @@ __author__ = 'ThePhoenix78'
 __license__ = 'MIT'
 __copyright__ = 'Copyright 2024-2026 ThePhoenix78'
 __url__ = 'https://github.com/ThePhoenix78/GeoNC'
-__newest__ = __version__ = '2.0.0'
+__newest__ = __version__ = '2.4.0'
 
 
 try:
