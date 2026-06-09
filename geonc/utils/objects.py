@@ -13,7 +13,7 @@ class GeoClass(dict):
         super().__setitem__(k, GeoObject(v))
 
     def __getattr__(self, k):
-        return super().get(k)
+        return super().__getitem__(k)
         
     def __setitem__(self, k, v):
         super().__setitem__(k, GeoObject(v))
